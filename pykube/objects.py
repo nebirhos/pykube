@@ -238,6 +238,16 @@ class Pod(NamespacedAPIObject):
         condition = next((c for c in cs if c["type"] == "Ready"), None)
         return condition is not None and condition["status"] == "True"
 
+    @property
+    def running(self):
+        phase = self.obj["status"].get("phase", None)
+        return phase is not None and phase == "Running"
+
+    @property
+    def succeeded(self):
+        phase = self.obj["status"].get("phase", None)
+        return phase is not None and phase == "Succeeded"
+
     def logs(self, container=None, pretty=None, previous=False,
              since_seconds=None, since_time=None, timestamps=False,
              tail_lines=None, limit_bytes=None):
