@@ -239,6 +239,11 @@ class Pod(NamespacedAPIObject):
         return condition is not None and condition["status"] == "True"
 
     @property
+    def pending(self):
+        phase = self.obj["status"].get("phase", None)
+        return phase is not None and phase == "Pending"
+
+    @property
     def running(self):
         phase = self.obj["status"].get("phase", None)
         return phase is not None and phase == "Running"
@@ -247,6 +252,16 @@ class Pod(NamespacedAPIObject):
     def succeeded(self):
         phase = self.obj["status"].get("phase", None)
         return phase is not None and phase == "Succeeded"
+
+    @property
+    def failed(self):
+        phase = self.obj["status"].get("phase", None)
+        return phase is not None and phase == "Failed"
+
+    @property
+    def unknown(self):
+        phase = self.obj["status"].get("phase", None)
+        return phase is not None and phase == "Unknown"
 
     def logs(self, container=None, pretty=None, previous=False,
              since_seconds=None, since_time=None, timestamps=False,
